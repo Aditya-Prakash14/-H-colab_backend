@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: hackmate-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: |
+      cd backend
+      pip install -r ../requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: |
+      cd backend
+      gunicorn backend.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: USE_SQLITE
+        value: false
+      - key: DEBUG
+        value: false
+      - key: DB_NAME
+        fromDatabase:
+          name: hackmate-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: hackmate-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: hackmate-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: hackmate-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: hackmate-db
+          property: port
+
+databases:
+  - name: hackmate-db
+    plan: free
+    region: oregon

@@ -1,6 +1,21 @@
-# HackMate - Django Backend
+# HackMate - Hackathon Teammate Finder
 
 HackMate is a comprehensive Django REST API backend for a mobile app that helps users find and manage hackathon teammates. The platform supports user authentication, profile management, hackathon listings, team formation, task management, and an intelligent teammate matching system.
+
+## 🚀 Quick Deployment
+
+**Ready to deploy?** This application is production-ready with comprehensive deployment configurations:
+
+- **📖 [Complete Deployment Guide](DEPLOYMENT.md)** - Step-by-step instructions for Render, Docker, and Heroku
+- **✅ [Deployment Checklist](DEPLOYMENT_CHECKLIST.md)** - Ensure nothing is missed
+- **⚡ Recommended**: [Deploy to Render](DEPLOYMENT.md#render-deployment-recommended) (easiest option)
+
+### Quick Deploy to Render
+1. Push code to GitHub
+2. Create Render account and PostgreSQL database
+3. Create Web Service with build command: `./build.sh`
+4. Set environment variables (see [guide](DEPLOYMENT.md))
+5. Deploy! 🎉
 
 ## Features
 

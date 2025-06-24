@@ -825,3 +825,48 @@ def search_users(request):
         results.append(user_data)
 
     return Response(results)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def health_check(request):
+    """Health check endpoint for monitoring"""
+    from django.db import connection
+    from django.core.cache import cache
+
+    health_status = {
+        'status': 'healthy',
+        'timestamp': timezone.now().isoformat(),
+        'version': '1.0.0',
+        'checks': {}
+    }
+
+    # Database check
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        health_status['checks']['database'] = 'healthy'
+    except Exception as e:
+        health_status['checks']['database'] = f'unhealthy: {str(e)}'
+        health_status['status'] = 'unhealthy'
+
+    # Cache check (optional)
+    try:
+        cache.set('health_check', 'test', 30)
+        cache.get('health_check')
+        health_status['checks']['cache'] = 'healthy'
+    except Exception as e:
+        health_status['checks']['cache'] = f'warning: {str(e)}'
+
+    # Basic stats
+    try:
+        health_status['stats'] = {
+            'total_users': User.objects.count(),
+            'total_hackathons': Hackathon.objects.count(),
+            'total_teams': Team.objects.count(),
+        }
+    except Exception as e:
+        health_status['stats'] = f'error: {str(e)}'
+
+    status_code = 200 if health_status['status'] == 'healthy' else 503
+    return Response(health_status, status=status_code)

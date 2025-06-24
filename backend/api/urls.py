@@ -48,4 +48,7 @@ urlpatterns = [
     # Matching system endpoints
     path('matching/preferences/', views.MatchingPreferenceView.as_view(), name='matching_preferences'),
     path('matching/find-teammates/', views.find_teammates, name='find_teammates'),
+
+    # Health check
+    path('health/', views.health_check, name='health_check'),
 ]
